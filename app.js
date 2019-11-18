@@ -9,7 +9,7 @@
  *
  * This is the completed code for the Messenger Platform quick start tutorial
  *
- * https://developers.facebook.com/docs/messenger-platform/getting-started/quick-start/
+ * https://developers.faceb ook.com/docs/messenger-platform/getting-started/quick-start/
  *
  * To run this code, you must do the following:
  *
