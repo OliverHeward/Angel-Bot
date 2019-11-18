@@ -72,6 +72,11 @@ app.post('/webhook', (req, res) => {
 
 });
 
+// Server index page
+app.get("/", function (req, res) {
+  res.send("Deployed!");
+});
+
 // Accepts GET requests at the /webhook endpoint
 app.get('/webhook', (req, res) => {
   
