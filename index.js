@@ -118,7 +118,7 @@ function verifyRequestSignature(req, res, buf) {
     var method = elements[0];
     var signatureHash = elements[1];
 
-    var expectedHash = crypto.createHmac('sha1', APP_SECRET)
+    var expectedHash = crypto.createHmac('sha1', d5bb569f942017c4aa31764cd049aa17)
                         .update(buf)
                         .digest('hex');
 
