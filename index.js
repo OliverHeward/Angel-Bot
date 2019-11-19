@@ -130,9 +130,11 @@ function verifyRequestSignature(req, res, buf) {
 
 function handleMessage(sender_psid, received_message) {
   let response;
+  console.log('[handleMessage] - WAS CALLED');
   
   // Checks if the message contains text
-  if (received_message.text != "") {    
+  if (received_message.text != "") {  
+    console.log('reached [recieved_message.text] block');  
     // Create the payload for a basic text message, which
     // will be added to the body of our request to the Send API
     response = {
@@ -173,7 +175,7 @@ function handleMessage(sender_psid, received_message) {
 }
 
 function handlePostback(sender_psid, received_postback) {
-  console.log('ok');
+  console.log('[handlePostback], ok');
    let response;
   // Get the payload for the postback
   let payload = received_postback.payload;
@@ -190,17 +192,19 @@ function handlePostback(sender_psid, received_postback) {
 
 function callSendAPI(sender_psid, response) {
   // Construct the message body
+  console.log('callSendAPI function was called');
   let request_body = {
     "recipient": {
       "id": sender_psid
     },
     "message": response
   }
+  console.log('[request_body]', request_body);
 
   // Send the HTTP request to the Messenger Platform
   request({
     "uri": "https://graph.facebook.com/v2.6/me/messages",
-    "qs": { "access_token": process.env.EAAHFzsBUAFcBAPjqOP67j1jqvUBZBZBlDUT2GngKL6dPYcZCTgS88jHp1b6VDv2dTr0kypkot2EMAWK27MZAX8CLLWlQvymg2uYefigwU1DC5qGDEmtJBT0BY2nFjZBd5hEAedXotDhVWZChVWdeZCAJ3Ec6wd6nqKkPSz7ojX6L9Qvho3XTslI },
+    "qs": { "access_token": PAGE_ACCESS_TOKEN },
     "method": "POST",
     "json": request_body
   }, (err, res, body) => {
