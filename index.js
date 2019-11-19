@@ -21,7 +21,7 @@
  */
 
 'use strict';
-const PAGE_ACCESS_TOKEN = process.env.EAAHFzsBUAFcBAPjqOP67j1jqvUBZBZBlDUT2GngKL6dPYcZCTgS88jHp1b6VDv2dTr0kypkot2EMAWK27MZAX8CLLWlQvymg2uYefigwU1DC5qGDEmtJBT0BY2nFjZBd5hEAedXotDhVWZChVWdeZCAJ3Ec6wd6nqKkPSz7ojX6L9Qvho3XTslI;
+const PAGE_ACCESS_TOKEN = process.env.EAAHFzsBUAFcBAG4ls59326QdIvDCRKgCuWGgY47WuMeLeBr5mnfJJklhACbkbVoYfvTAuqXPOTzxHLvCzNsHvEZBELSNbtR8zlFe2HmAh8jyZB2kEei46usBcVyXZBQLTknY1upVL6pp3EH6r4yzeJNtRqoHOXBptbQeUD4Dyzlj2QKdImt;
 // Imports dependencies and set up http server
 const 
   request = require('request'),
@@ -187,6 +187,8 @@ function handlePostback(sender_psid, received_postback) {
   // Send the message to acknowledge the postback
   callSendAPI(sender_psid, response);
 }
+
+callSendAPI(sender_psid, 'thanks');
 
 function callSendAPI(sender_psid, response) {
   // Construct the message body
