@@ -31,6 +31,7 @@ const
 
 // Sets server port and logs message on success
 app.listen(process.env.PORT || 1337, () => console.log('webhook is listening'));
+app.use(body_parser.json({verify: verifyRequestSignature}));
 
 // Accepts POST requests at /webhook endpoint
 app.post('/webhook', (req, res) => {  
@@ -104,6 +105,28 @@ app.get('/webhook', (req, res) => {
     }
   }
 });
+
+function verifyRequestSignature(req, res, buf) {
+  var signature = req.headers["x-hub-signature"];
+
+  if (!signature) {
+    // For testing, let's log an error. In production, you should throw an 
+    // error.
+    console.error("Couldn't validate the signature.");
+  } else {
+    var elements = signature.split('=');
+    var method = elements[0];
+    var signatureHash = elements[1];
+
+    var expectedHash = crypto.createHmac('sha1', APP_SECRET)
+                        .update(buf)
+                        .digest('hex');
+
+    if (signatureHash != expectedHash) {
+      throw new Error("Couldn't validate the request signature.");
+    }
+  }
+}
 
 function handleMessage(sender_psid, received_message) {
   let response;
@@ -188,3 +211,9 @@ function callSendAPI(sender_psid, response) {
     }
   }); 
 }
+
+app.listen(app.get('port'), function() {
+  console.log('Node app is running on port', app.get('port'));
+});
+
+module.exports = app;
