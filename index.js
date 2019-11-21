@@ -133,18 +133,7 @@ function handleMessage(sender_psid, received_message) {
     
     // Checks if the message contains text
     if (received_message.text) {    
-      // Create the payload for a basic text message, which
-      // will be added to the body of our request to the Send API
-      switch(text) {
-        case 'Get Started':
-          sendGetStarted(sender_psid);
-          console.log('[switch case[get_started]] - reached');
-          break;
-    
-        default:
-          console.log('[switch case[default]] - reached');
-          callSendAPI(sender_psid, "Postback called");
-      }
+      handlePostback(sender_psid, received_message)
     } else if (received_message.attachments) {
       // Get the URL of the message attachment
       let attachment_url = received_message.attachments[0].payload.url;
@@ -183,21 +172,52 @@ function handlePostback(sender_psid, received_postback) {
   let response;
   // Get the payload for the postback
   let payload = received_postback.payload;
+  console.log('[handlePostback, receivedpostback]', received_postback);
+  switch(payload) {
+    case 'Get Started':
+      sendGetStarted(sender_psid);
+      console.log('[switch case[Get Started]] - reached');
+      break;
+    case 'get_started':
+      sendGetStarted(sender_psid);
+      console.log('[switch case[get_started] - reached]')
+
+    default:
+      console.log('[switch case[default]] - reached');
+      sendTextMessage(sender_psid, "Postback called");
+  }
 
   // Set the response based on the postback payload
-  if (payload === 'yes') {
-    response = { "text": "Thanks!" }
-  } else if (payload === 'no') {
-    response = { "text": "Oops, try sending another image." }
-  }
+  // if (payload === 'yes') {
+  //   response = { "text": "Thanks!" }
+  // } else if (payload === 'no') {
+  //   response = { "text": "Oops, try sending another image." }
+  // }
   // Send the message to acknowledge the postback
-  callSendAPI(sender_psid, response);
+  // callSendAPI(sender_psid, response);
 }
 
-function sendGetStarted(recipientId) {
+/*
+ * Send a text message using the Send API.
+ *
+ */
+function sendTextMessage(sender_psid, messageText) {
   var messageData = {
     recipient: {
-      id: recipientId
+      id: sender_psid
+    },
+    message: {
+      text: messageText,
+    }
+  };
+
+  callSendAPI(messageData);
+}
+
+function sendGetStarted(sender_psid) {
+  var messageData = {
+    recipient: {
+      id: sender_psid
     },
     message: {
       attachment: {
@@ -209,7 +229,7 @@ function sendGetStarted(recipientId) {
       }
     }
   }
-  callSendAPI(recipientId, messageData);
+  callSendAPI(sender_psid, messageData);
 }
 
 function callSendAPI(sender_psid, response) {
