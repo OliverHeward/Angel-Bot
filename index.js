@@ -180,9 +180,11 @@ function handlePostback(sender_psid, received_postback) {
   switch(payload) {
     case 'get_started':
       sendGetStarted(sender_psid);
+      console.log('[switch case[get_started]] - reached');
       break;
 
-    default: 
+    default:
+      console.log('[switch case[default]] - reached');
       callSendAPI(sender_psid, "Postback called");
   }
 
@@ -193,7 +195,7 @@ function handlePostback(sender_psid, received_postback) {
   //   response = { "text": "Oops, try sending another image." }
   // }
   // Send the message to acknowledge the postback
-  callSendAPI(sender_psid, response);
+  // callSendAPI(sender_psid, response);
 }
 
 function sendGetStarted(recipientId) {
