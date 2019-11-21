@@ -224,7 +224,6 @@ function sendGetStarted(sender_psid) {
       attachment: {
         type: "template",
         payload: {
-          template_type: "button",
           text: "Hey! Welcome to the Hunry Horse - Jack Daniel's Honey Ultimate Summer Pass. We need a couple of details from you to get started...",
         }
       }
