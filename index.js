@@ -203,7 +203,7 @@ function handlePostback(sender_psid, received_postback) {
  *
  */
 function sendTextMessage(sender_psid, messageText) {
-  var messageData = {
+  var response = {
     recipient: {
       id: sender_psid
     },
@@ -212,7 +212,7 @@ function sendTextMessage(sender_psid, messageText) {
     }
   };
 
-  callSendAPI(messageData);
+  callSendAPI(response);
 }
 
 function sendGetStarted(sender_psid) {
@@ -230,10 +230,10 @@ function sendGetStarted(sender_psid) {
       }
     }
   }
-  callSendAPI(sender_psid, response);
+  callSendAPI(response);
 }
 
-function callSendAPI(sender_psid, response) {
+function callSendAPI(response) {
   // Construct the message body
   console.log('callSendAPI function was called', response);
   let request_body = response;
