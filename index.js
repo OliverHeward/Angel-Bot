@@ -133,7 +133,7 @@ function handleMessage(sender_psid, received_message) {
     
     // Checks if the message contains text
     if (received_message.text) {    
-      handlePostback(sender_psid, received_message)
+      handlePostback(sender_psid, received_message.text)
     } else if (received_message.attachments) {
       // Get the URL of the message attachment
       let attachment_url = received_message.attachments[0].payload.url;
