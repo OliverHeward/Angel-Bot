@@ -130,10 +130,10 @@ function verifyRequestSignature(req, res, buf) {
 
 function handleMessage(sender_psid, received_message) {
     let response;
-    
+    console.log(['obj'], received_message);
     // Checks if the message contains text
     if (received_message.text) { 
-      console.log('[handleMessage.text]', handleMessage.text);   
+      console.log('[handleMessage.text]', recieved_message.text);   
       handlePostback(sender_psid, received_message.text)
     } else if (received_message.attachments) {
       // Get the URL of the message attachment
