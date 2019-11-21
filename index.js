@@ -136,17 +136,15 @@ function handleMessage(sender_psid, received_message) {
   // Checks if the message contains text
   if (received_message.text != "") {  
     console.log('reached [recieved_message.text]', received_message);  
-    console.log(received_message.attachments[0]);
     // Create the payload for a basic text message, which
     // will be added to the body of our request to the Send API
     response = {
       "text": `You sent the message: "${received_message.text}". Now send me an attachment!`
     }
-  } else if (received_message.attachments || received_message.attachment) {
+  } else if (received_message.attachments) {
     // Get the URL of the message attachment
-    console.log("['reached received_message.attachments']");
+    console.log("['reached received_message.attachmets']");
     let attachment_url = received_message.attachments[0].payload.url;
-    console.log(received_message.attachments[0]);
     console.log(attachment_url);
     response = {
       "attachment": {
