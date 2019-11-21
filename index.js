@@ -31,7 +31,6 @@ const
 
 // Sets server port and logs message on success
 app.listen(process.env.PORT || 1337, () => console.log('webhook is listening'));
-// app.use(body_parser.urlencoded({"extended": false}));
 app.use(body_parser.json({verify: verifyRequestSignature}));
 
 // Accepts POST requests at /webhook endpoint
@@ -134,8 +133,8 @@ function handleMessage(sender_psid, received_message) {
   console.log('[handleMessage] - WAS CALLED');
   
   // Checks if the message contains text
-  if (received_message.text != "") {  
-    console.log('reached [recieved_message.text]', received_message);  
+  if (received_message.text) {  
+    console.log('reached [recieved_message.text] block');  
     // Create the payload for a basic text message, which
     // will be added to the body of our request to the Send API
     response = {
@@ -143,9 +142,7 @@ function handleMessage(sender_psid, received_message) {
     }
   } else if (received_message.attachments) {
     // Get the URL of the message attachment
-    console.log("['reached received_message.attachmets']");
     let attachment_url = received_message.attachments[0].payload.url;
-    console.log(attachment_url);
     response = {
       "attachment": {
         "type": "template",
