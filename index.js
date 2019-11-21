@@ -216,7 +216,7 @@ function sendTextMessage(sender_psid, messageText) {
 }
 
 function sendGetStarted(sender_psid) {
-  var messageData = {
+  var response = {
     recipient: {
       id: sender_psid
     },
@@ -230,15 +230,15 @@ function sendGetStarted(sender_psid) {
       }
     }
   }
-  callSendAPI(sender_psid, messageData);
+  callSendAPI(sender_psid, response);
 }
 
 function callSendAPI(sender_psid, response) {
   // Construct the message body
-  console.log('callSendAPI function was called');
+  console.log('callSendAPI function was called', response);
   let request_body = {
     "recipient": {
-      "id": sender_psid
+      "id": sender_psid 
     },
     "message": response
   }
