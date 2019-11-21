@@ -170,22 +170,48 @@ function handleMessage(sender_psid, received_message) {
     
     // Send the response message
     callSendAPI(sender_psid, response);    
-  }
+}
 
 function handlePostback(sender_psid, received_postback) {
-  console.log('[handlePostback], ok');
-   let response;
+  let response;
   // Get the payload for the postback
   let payload = received_postback.payload;
 
-  // Set the response based on the postback payload
-  if (payload === 'yes') {
-    response = { "text": "Thanks!" }
-  } else if (payload === 'no') {
-    response = { "text": "Oops, try sending another image." }
+  switch(payload) {
+    case 'get_started':
+      sendGetStarted(sender_psid);
+      break;
+
+    default: 
+      callSendAPI(sender_psid, "Postback called");
   }
+
+  // Set the response based on the postback payload
+  // if (payload === 'yes') {
+  //   response = { "text": "Thanks!" }
+  // } else if (payload === 'no') {
+  //   response = { "text": "Oops, try sending another image." }
+  // }
   // Send the message to acknowledge the postback
   callSendAPI(sender_psid, response);
+}
+
+function sendGetStarted(recipientId) {
+  var messageData = {
+    recipient: {
+      id: recipientId
+    },
+    message: {
+      attachment: {
+        type: "template",
+        payload: {
+          template_type: "button",
+          text: "Hey! Welcome to the Hunry Horse - Jack Daniel's Honey Ultimate Summer Pass. We need a couple of details from you to get started...",
+        }
+      }
+    }
+  }
+  callSendAPI(recipientId, messageData);
 }
 
 function callSendAPI(sender_psid, response) {
