@@ -236,12 +236,7 @@ function sendGetStarted(sender_psid) {
 function callSendAPI(sender_psid, response) {
   // Construct the message body
   console.log('callSendAPI function was called', response);
-  let request_body = {
-    "recipient": {
-      "id": sender_psid 
-    },
-    "message": response
-  }
+  let request_body = response;
   console.log('[request_body]', request_body);
 
   // Send the HTTP request to the Messenger Platform
