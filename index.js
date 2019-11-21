@@ -132,7 +132,8 @@ function handleMessage(sender_psid, received_message) {
     let response;
     
     // Checks if the message contains text
-    if (received_message.text) {    
+    if (received_message.text) { 
+      console.log('[handleMessage.text]', handleMessage.text);   
       handlePostback(sender_psid, received_message.text)
     } else if (received_message.attachments) {
       // Get the URL of the message attachment
