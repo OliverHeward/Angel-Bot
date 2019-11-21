@@ -178,7 +178,7 @@ function handlePostback(sender_psid, received_postback) {
   let payload = received_postback.payload;
 
   switch(payload) {
-    case 'get_started':
+    case 'Get Started':
       sendGetStarted(sender_psid);
       console.log('[switch case[get_started]] - reached');
       break;
