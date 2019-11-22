@@ -215,7 +215,7 @@ function sendGetStarted(sender_psid) {
 }
 
 function sendAgeCheck(sender_psid) {
-  let reponse;
+  let response;
   console.log('sendAgeCheck');
   response = {
     "text": "How old are you {{user_first_name}}?"
