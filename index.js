@@ -172,7 +172,7 @@ function handleMessage(sender_psid, received_message) {
 function handlePostback(sender_psid, received_postback) {
   let response;
   // Get the payload for the postback
-  let payload = received_postback.payload;
+  let payload = received_postback.title;
   console.log('[handlePostback, receivedpostback]', received_postback);
   switch(payload) {
     case 'Get Started':
