@@ -245,8 +245,15 @@ function callSendAPI(response) {
     "method": "POST",
     "json": request_body
   }, (err, res, body) => {
-    if (!err) {
-      console.log('message sent!')
+    if (!err && res.statusCode === 200) {
+      console.log('message sent!');
+      var recepientId = body.recipient_id;
+      var messageId = body.message_id;
+      if (messageId) {
+        console.log('Successfully sent message with id %s to recipient %s', messageId, recepientId);
+      } else {
+        console.log('Successfully called Send API for recipient %s', recipientId);
+      }
     } else {
       console.error("Unable to send message:" + err);
     }
