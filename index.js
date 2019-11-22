@@ -205,13 +205,14 @@ function sendTextMessage(sender_psid, messageText) {
 }
 
 function sendGetStarted(sender_psid) {
+  let response;
   console.log('sendGetStarted');
   response = {
-      "text": "Hey! Welcome to the Hunry Horse - Jack Daniels Honey Ultimate Summer Pass. We need a couple of details from you to get started...",
+      "text": "Hey! Welcome to the Hunry Horse - Jack Daniels Honey Ultimate Summer Pass. We need a couple of details from you to get started..."
   };
   response2 = {
     "text": "How old are you, {{user_first_name}}"
-  }
+  };
   callSendAPI(sender_psid, response).then(() => {
     return callSendAPI(sender_psid, response2);
   });
