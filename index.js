@@ -176,8 +176,7 @@ function handlePostback(sender_psid, received_postback) {
   console.log('[handlePostback, receivedpostback]', received_postback);
   switch(payload) {
     case 'Get Started':
-      response = sendGetStarted();
-      callSendAPI(sender_psid, response);
+      sendGetStarted(sender_psid);
       console.log('[switch case[Get Started]] - reached');
       break;
     case 'GET_STARTED':
@@ -205,11 +204,17 @@ function sendTextMessage(sender_psid, messageText) {
   };
 }
 
-function sendGetStarted() {
+function sendGetStarted(sender_psid) {
   console.log('sendGetStarted');
-  return {
+  reponse = {
       "text": "Hey! Welcome to the Hunry Horse - Jack Daniels Honey Ultimate Summer Pass. We need a couple of details from you to get started...",
-    }
+  };
+  response2 = {
+    "text": "How old are you, {{user_first_name}}"
+  }
+  callSendAPI(sender_psid, response).then(() => {
+    return callSendAPI(sender_psid, response2);
+  });
 }
 
 function callSendAPI(sender_psid, response) {
