@@ -245,7 +245,7 @@ function callSendAPI(response) {
     "method": "POST",
     "json": request_body
   }, (err, res, body) => {
-    if (!err && res.statusCode === 200) {
+    if (!err) {
       console.log('message sent!');
       var recepientId = body.recipient_id;
       var messageId = body.message_id;
