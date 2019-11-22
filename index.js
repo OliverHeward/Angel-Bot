@@ -172,7 +172,7 @@ function handleMessage(sender_psid, received_message) {
 function handlePostback(sender_psid, received_postback) {
   let response;
   // Get the payload for the postback
-  let payload = received_postback.title;
+  let payload = received_postback.payload;
   console.log('[handlePostback, receivedpostback]', received_postback);
   switch(payload) {
     case 'Get Started':
@@ -183,7 +183,7 @@ function handlePostback(sender_psid, received_postback) {
     case 'GET_STARTED':
       response = sendGetStarted();
       sendGetStarted(sender_psid, response);
-      console.log('[switch case[GET_STARTED] - reached]')
+      // console.log('[switch case[GET_STARTED] - reached]');
     default:
       console.log('[switch case[default]] - reached');
       sendTextMessage(sender_psid, "Postback called");
@@ -214,7 +214,7 @@ function sendGetStarted() {
         "type": "template",
         "payload": {
           "text": "Hey! Welcome to the Hunry Horse - Jack Daniel's Honey Ultimate Summer Pass. We need a couple of details from you to get started...",
-        }
+      }
     }
   }
 }
