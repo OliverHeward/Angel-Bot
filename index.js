@@ -172,30 +172,21 @@ function handleMessage(sender_psid, received_message) {
 function handlePostback(sender_psid, received_postback) {
   let response;
   // Get the payload for the postback
-  let title = received_postback.title;
+  let payload = received_postback.payload;
   console.log('[handlePostback, receivedpostback]', received_postback);
-  switch(title) {
+  switch(payload) {
     case 'Get Started':
-      sendGetStarted(sender_psid);
+      response = sendGetStarted();
+      callSendAPI(sender_psid, response);
       console.log('[switch case[Get Started]] - reached');
       break;
     case 'get_started':
       sendGetStarted(sender_psid);
       console.log('[switch case[get_started] - reached]')
-
     default:
       console.log('[switch case[default]] - reached');
       sendTextMessage(sender_psid, "Postback called");
   }
-
-  // Set the response based on the postback payload
-  // if (payload === 'yes') {
-  //   response = { "text": "Thanks!" }
-  // } else if (payload === 'no') {
-  //   response = { "text": "Oops, try sending another image." }
-  // }
-  // Send the message to acknowledge the postback
-  // callSendAPI(sender_psid, response);
 }
 
 /*
@@ -212,30 +203,30 @@ function sendTextMessage(sender_psid, messageText) {
     }
   };
 
-  callSendAPI(response);
+  callSendAPI(sender_psid, response);
 }
 
-function sendGetStarted(sender_psid) {
-  var response = {
-    recipient: {
-      id: sender_psid
-    },
-    message: {
+function sendGetStarted() {
+  console.log('sendGetStarted');
+  return {
       attachment: {
         type: "template",
         payload: {
           text: "Hey! Welcome to the Hunry Horse - Jack Daniel's Honey Ultimate Summer Pass. We need a couple of details from you to get started...",
         }
-      }
     }
   }
-  callSendAPI(response);
 }
 
-function callSendAPI(response) {
+function callSendAPI(sender_psid, response) {
   // Construct the message body
   console.log('callSendAPI function was called', response);
-  let request_body = response;
+  let request_body = {
+    "recipient": {
+      "id": sender_psid
+    },
+    "message": response
+  };
   console.log('[request_body]', request_body);
 
   // Send the HTTP request to the Messenger Platform
@@ -247,13 +238,6 @@ function callSendAPI(response) {
   }, (err, res, body) => {
     if (!err) {
       console.log('message sent!');
-      var recepientId = body.recipient_id;
-      var messageId = body.message_id;
-      if (messageId) {
-        console.log('Successfully sent message with id %s to recipient %s', messageId, recepientId);
-      } else {
-        console.log('Successfully called Send API for recipient %s', recipientId);
-      }
     } else {
       console.error("Unable to send message:" + err);
     }
