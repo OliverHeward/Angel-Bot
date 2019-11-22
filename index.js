@@ -210,10 +210,10 @@ function sendTextMessage(sender_psid, messageText) {
 function sendGetStarted() {
   console.log('sendGetStarted');
   return {
-      attachment: {
-        type: "template",
-        payload: {
-          text: "Hey! Welcome to the Hunry Horse - Jack Daniel's Honey Ultimate Summer Pass. We need a couple of details from you to get started...",
+      "attachment": {
+        "type": "template",
+        "payload": {
+          "text": "Hey! Welcome to the Hunry Horse - Jack Daniel's Honey Ultimate Summer Pass. We need a couple of details from you to get started...",
         }
     }
   }
