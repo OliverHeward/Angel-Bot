@@ -205,17 +205,22 @@ function sendTextMessage(sender_psid, messageText) {
 }
 
 function sendGetStarted(sender_psid) {
-  let response, response2;
+  let response;
   console.log('sendGetStarted');
   response = {
       "text": "Hey! Welcome to the Hunry Horse - Jack Daniels Honey Ultimate Summer Pass. We need a couple of details from you to get started..."
   };
+  callSendAPI(sender_psid, response);
+  sendAgeCheck(sender_psid);
+}
+
+function sendAgeCheck(sender_psid) {
+  let reponse;
+  console.log('sendAgeCheck');
   response2 = {
-    "text": "How old are you, {{user_first_name}}"
+    "text": "How old are you {{user_first_name}}?"
   };
-  callSendAPI(sender_psid, response).then(() => {
-    return callSendAPI(sender_psid, response2);
-  });
+  callSendAPI(sender_psid, response);
 }
 
 function callSendAPI(sender_psid, response) {
