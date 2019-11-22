@@ -205,7 +205,7 @@ function sendTextMessage(sender_psid, messageText) {
 }
 
 function sendGetStarted(sender_psid) {
-  let response;
+  let response, response2;
   console.log('sendGetStarted');
   response = {
       "text": "Hey! Welcome to the Hunry Horse - Jack Daniels Honey Ultimate Summer Pass. We need a couple of details from you to get started..."
