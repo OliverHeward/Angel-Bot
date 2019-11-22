@@ -195,28 +195,21 @@ function handlePostback(sender_psid, received_postback) {
  *
  */
 function sendTextMessage(sender_psid, messageText) {
-  var response = {
-    recipient: {
-      id: sender_psid
+  return {
+    "recipient": {
+      "id": sender_psid
     },
-    message: {
-      text: messageText,
+    "message": {
+      "text": messageText,
     }
   };
-
-  callSendAPI(sender_psid, response);
 }
 
 function sendGetStarted() {
   console.log('sendGetStarted');
   return {
-      "attachment": {
-        "type": "template",
-        "payload": {
-          "text": "Hey! Welcome to the Hunry Horse - Jack Daniels Honey Ultimate Summer Pass. We need a couple of details from you to get started...",
-      }
+      "text": "Hey! Welcome to the Hunry Horse - Jack Daniels Honey Ultimate Summer Pass. We need a couple of details from you to get started...",
     }
-  }
 }
 
 function callSendAPI(sender_psid, response) {
