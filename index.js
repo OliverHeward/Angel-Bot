@@ -204,6 +204,15 @@ function sendTextMessage(sender_psid, messageText) {
   };
 }
 
+function sendAgeCheck(sender_psid) {
+  let response;
+  console.log('sendAgeCheck');
+  response = {
+    "text": "How old are you?"
+  };
+  callSendAPI(sender_psid, response);
+}
+
 function sendGetStarted(sender_psid) {
   let response;
   console.log('sendGetStarted');
@@ -212,15 +221,6 @@ function sendGetStarted(sender_psid) {
   };
   callSendAPI(sender_psid, response);
   sendAgeCheck(sender_psid);
-}
-
-function sendAgeCheck(sender_psid) {
-  let response;
-  console.log('sendAgeCheck');
-  response = {
-    "text": "How old are you {{user_first_name}}?"
-  };
-  callSendAPI(sender_psid, response);
 }
 
 function callSendAPI(sender_psid, response) {
