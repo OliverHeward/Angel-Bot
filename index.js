@@ -217,7 +217,7 @@ function sendGetStarted(sender_psid) {
 function sendAgeCheck(sender_psid) {
   let reponse;
   console.log('sendAgeCheck');
-  response2 = {
+  response = {
     "text": "How old are you {{user_first_name}}?"
   };
   callSendAPI(sender_psid, response);
