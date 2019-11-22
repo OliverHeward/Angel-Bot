@@ -180,9 +180,10 @@ function handlePostback(sender_psid, received_postback) {
       callSendAPI(sender_psid, response);
       console.log('[switch case[Get Started]] - reached');
       break;
-    case 'get_started':
-      sendGetStarted(sender_psid);
-      console.log('[switch case[get_started] - reached]')
+    case 'GET_STARTED':
+      response = sendGetStarted();
+      sendGetStarted(sender_psid, response);
+      console.log('[switch case[GET_STARTED] - reached]')
     default:
       console.log('[switch case[default]] - reached');
       sendTextMessage(sender_psid, "Postback called");
