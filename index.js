@@ -213,7 +213,7 @@ function sendGetStarted() {
       "attachment": {
         "type": "template",
         "payload": {
-          "text": "Hey! Welcome to the Hunry Horse - Jack Daniel's Honey Ultimate Summer Pass. We need a couple of details from you to get started...",
+          "text": "Hey! Welcome to the Hunry Horse - Jack Daniels Honey Ultimate Summer Pass. We need a couple of details from you to get started...",
       }
     }
   }
