@@ -247,8 +247,8 @@ function callSendAPI(sender_psid, response) {
   };
   console.log('[request_body]', request_body);
 
-  const qs = 'access_token='+ encodeURIComponent("EAAHFzsBUAFcBAG4ls59326QdIvDCRKgCuWGgY47WuMeLeBr5mnfJJklhACbkbVoYfvTAuqXPOTzxHLvCzNsHvEZBELSNbtR8zlFe2HmAh8jyZB2kEei46usBcVyXZBQLTknY1upVL6pp3EH6r4yzeJNtRqoHOXBptbQeUD4Dyzlj2QKdImt");
-  return fetch('https://graph.facebook.com/v2.6/messages?' + qs, {
+  const qs = "access_token=EAAHFzsBUAFcBAG4ls59326QdIvDCRKgCuWGgY47WuMeLeBr5mnfJJklhACbkbVoYfvTAuqXPOTzxHLvCzNsHvEZBELSNbtR8zlFe2HmAh8jyZB2kEei46usBcVyXZBQLTknY1upVL6pp3EH6r4yzeJNtRqoHOXBptbQeUD4Dyzlj2QKdImt";
+  return fetch("https://graph.facebook.com/v2.6/messages?" + qs, {
     "method": "POST",
     "headers": {"Content-Type": "application/json"},
     "body": JSON.stringify(request_body),
