@@ -251,7 +251,7 @@ function callSendAPI(sender_psid, response) {
   return fetch('https://graph.facebook.com/v2.6/messages?' + qs, {
     "method": "POST",
     "headers": {"Content-Type": "application/json"},
-    "body": request_body
+    "body": JSON.stringify(request_body),
   }, (err, res, body) => {
     if (!err) {
       console.log('message sent!');
