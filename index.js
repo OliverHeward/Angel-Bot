@@ -252,12 +252,6 @@ function callSendAPI(sender_psid, response) {
     "method": "POST",
     "headers": {"Content-Type": "application/json"},
     "body": JSON.stringify(request_body),
-  }, (err, res, body) => {
-    if (!err) {
-      console.log('message sent!');
-    } else {
-      console.error("Unable to send message:" + err);
-    }
   });
 };
   // // Send the HTTP request to the Messenger Platform
