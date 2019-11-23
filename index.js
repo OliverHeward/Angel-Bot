@@ -26,6 +26,7 @@ const PAGE_ACCESS_TOKEN = process.env.EAAHFzsBUAFcBAG4ls59326QdIvDCRKgCuWGgY47Wu
 const 
   request = require('request'),
   express = require('express'),
+  fetch = require('node-fetch'),
   body_parser = require('body-parser'),
   app = express().use(body_parser.json()); // creates express http server
 
@@ -173,19 +174,16 @@ function handlePostback(sender_psid, received_postback) {
   let response;
   // Get the payload for the postback
   let payload = received_postback.payload;
+  let ageLim = "18";
   console.log('[handlePostback, receivedpostback]', received_postback);
-  switch(payload) {
-    case 'Get Started':
+  if (payload === 'Get Started') {
       sendGetStarted(sender_psid);
       console.log('[switch case[Get Started]] - reached');
-      break;
-    case 'GET_STARTED':
-      response = sendGetStarted();
-      sendGetStarted(sender_psid, response);
-      // console.log('[switch case[GET_STARTED] - reached]');
-    default:
-      console.log('[switch case[default]] - reached');
-      sendTextMessage(sender_psid, "Postback called");
+  } else if (payload > "18") {
+    sendTextMessage(sender_psid, "Great!");
+    sendVenueCheck(sender_psid);
+  } else if (payload < "18") {
+    sendSorry(sender_psid);
   }
 }
 
@@ -194,33 +192,48 @@ function handlePostback(sender_psid, received_postback) {
  *
  */
 function sendTextMessage(sender_psid, messageText) {
-  return {
-    "recipient": {
-      "id": sender_psid
-    },
+  console.log('sendTextMessage', messageText);
+  let response;
+  response = {
     "message": {
       "text": messageText,
     }
   };
+  callSendAPI(sender_psid, messageText);
 }
 
-function sendAgeCheck(sender_psid) {
-  let response;
-  console.log('sendAgeCheck');
-  response = {
-    "text": "How old are you?"
-  };
-  callSendAPI(sender_psid, response);
-}
+// function sendAgeCheck(sender_psid) {
+//   let response;
+//   console.log('sendAgeCheck');
+//   response = {
+//     "text": "How old are you?"
+//   };
+//   callSendAPI(sender_psid, response);
+// }
 
 function sendGetStarted(sender_psid) {
   let response;
+  let response2;
   console.log('sendGetStarted');
   response = {
       "text": "Hey! Welcome to the Hunry Horse - Jack Daniels Honey Ultimate Summer Pass. We need a couple of details from you to get started..."
   };
-  callSendAPI(sender_psid, response);
-  sendAgeCheck(sender_psid);
+  response2 = {
+    "text": "How old are you?"
+  };
+  callSendAPI(sender_psid, response).then(() => {
+    console.log('.then retrun callSendAPI called');
+    return callSendAPI(sender_psid, response2);
+  });
+  // sendAgeCheck(sender_psid);
+}
+
+function sendVenueCheck(sender_psid) {
+  let response; 
+  console.log('sendVenueCheck');
+  response = {
+    "text": "Great!"
+  }
 }
 
 function callSendAPI(sender_psid, response) {
@@ -234,20 +247,32 @@ function callSendAPI(sender_psid, response) {
   };
   console.log('[request_body]', request_body);
 
-  // Send the HTTP request to the Messenger Platform
-  request({
-    "uri": "https://graph.facebook.com/v2.6/me/messages",
-    "qs": { "access_token": "EAAHFzsBUAFcBAG4ls59326QdIvDCRKgCuWGgY47WuMeLeBr5mnfJJklhACbkbVoYfvTAuqXPOTzxHLvCzNsHvEZBELSNbtR8zlFe2HmAh8jyZB2kEei46usBcVyXZBQLTknY1upVL6pp3EH6r4yzeJNtRqoHOXBptbQeUD4Dyzlj2QKdImt" },
+  const qs = 'access_token='+ encodeURIComponent("EAAHFzsBUAFcBAG4ls59326QdIvDCRKgCuWGgY47WuMeLeBr5mnfJJklhACbkbVoYfvTAuqXPOTzxHLvCzNsHvEZBELSNbtR8zlFe2HmAh8jyZB2kEei46usBcVyXZBQLTknY1upVL6pp3EH6r4yzeJNtRqoHOXBptbQeUD4Dyzlj2QKdImt");
+  return fetch('https://graph.facebook.com/v2.6/messages?' + qs, {
     "method": "POST",
-    "json": request_body
+    "headers": {"Content-Type": "application/json"},
+    "body": request_body
   }, (err, res, body) => {
     if (!err) {
       console.log('message sent!');
     } else {
       console.error("Unable to send message:" + err);
     }
-  }); 
-}
+  });
+  // // Send the HTTP request to the Messenger Platform
+  // request({
+  //   "uri": "https://graph.facebook.com/v2.6/me/messages",
+  //   "qs": { "access_token": "EAAHFzsBUAFcBAG4ls59326QdIvDCRKgCuWGgY47WuMeLeBr5mnfJJklhACbkbVoYfvTAuqXPOTzxHLvCzNsHvEZBELSNbtR8zlFe2HmAh8jyZB2kEei46usBcVyXZBQLTknY1upVL6pp3EH6r4yzeJNtRqoHOXBptbQeUD4Dyzlj2QKdImt" },
+  //   "method": "POST",
+  //   "json": request_body
+  // }, (err, res, body) => {
+  //   if (!err) {
+  //     console.log('message sent!');
+  //   } else {
+  //     console.error("Unable to send message:" + err);
+  //   }
+  // }); 
+// }
 
 app.listen(app.get('port'), function() {
   console.log('Node app is running on port', app.get('port'));
