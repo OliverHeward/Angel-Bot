@@ -249,9 +249,9 @@ function callSendAPI(sender_psid, response) {
 
   const qs = "access_token=EAAHFzsBUAFcBAG4ls59326QdIvDCRKgCuWGgY47WuMeLeBr5mnfJJklhACbkbVoYfvTAuqXPOTzxHLvCzNsHvEZBELSNbtR8zlFe2HmAh8jyZB2kEei46usBcVyXZBQLTknY1upVL6pp3EH6r4yzeJNtRqoHOXBptbQeUD4Dyzlj2QKdImt";
   return fetch("https://graph.facebook.com/v2.6/messages?" + qs, {
-    "method": "POST",
-    "body": request_body,
-  });
+    method: "POST",
+    body: JSON.stringify(request_body),
+  }).then(res => res.json()).then(json => console.log(json));
 };
   // // Send the HTTP request to the Messenger Platform
   // request({
