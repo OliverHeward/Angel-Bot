@@ -179,7 +179,8 @@ function handlePostback(sender_psid, received_postback) {
       console.log('[switch case[Get Started]] - reached');
   } else if (typeof parseInt(payload) == 'number') {
     console.log('typof payload = number called');
-    let age = Number(payload);
+    let age = parseInt(payload, 10);
+    console.log(age);
     if (isNaN(age)) {
       console.log('isNaN');
     } else {
