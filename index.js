@@ -179,15 +179,12 @@ function handlePostback(sender_psid, received_postback) {
       console.log('[switch case[Get Started]] - reached');
   } else if (typeof parseInt(payload) == 'number') {
     console.log('typof payload = number called');
-    let paynum = parseInt(payload);
-    if (paynum >= 18) {
+    let paynum = payload;
+    if (parseInt(payload) >= 18) {
       sendVenueCheck(sender_psid);
     } else {
       sendSorry(sender_psid);
     }
-  } else if (payload >= 18) {
-    console.log('[payload >= 18]');
-    sendVenueCheck(sender_psid);
   } else {
     sendTextMessage(sender_psid, "You sent something I don't recognise");
   }
