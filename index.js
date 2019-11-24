@@ -172,12 +172,12 @@ function handlePostback(sender_psid, received_postback) {
   let response;
   // Get the payload for the postback
   let payload = received_postback.payload;
-  let ageLim = "18";
   console.log('[handlePostback, receivedpostback]', received_postback);
   if (payload === 'Get Started') {
       sendGetStarted(sender_psid);
       console.log('[switch case[Get Started]] - reached');
   } else if (typeof payload == 'number') {
+    console.log('typof payload = number called');
    let paynum = parseInt(payload);
    if (paynum >= 18) {
     sendVenueCheck(sender_psid);
