@@ -165,12 +165,14 @@ function handleMessage(sender_psid, received_message) {
 function handlePostback(sender_psid, received_postback) {
   let response;
   // Get the payload for the postback
+  let message = received_postback;
   let payload = received_postback.payload;
   console.log("[handlePostback, receivedpostback]", received_postback);
   if (payload === "Get Started") {
     sendGetStarted(sender_psid);
     console.log("[switch case[Get Started]] - reached");
-  } else if (typeof parseInt(payload) == "number") {
+  } 
+  if (typeof parseInt(message) == "number") {
     console.log("typof payload = number called");
     console.log("typeof block", received_postback);
     let age = Number(received_postback);
@@ -180,7 +182,7 @@ function handlePostback(sender_psid, received_postback) {
     } else {
       sendSorry(sender_psid);
     }
-  } else if (received_postback === "The Fox Under the Hill") {
+  } else if (message === "The Fox Under the Hill") {
     console.log("payload === venue name");
     sendDeals(sender_psid);
   } else {
