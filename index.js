@@ -291,14 +291,10 @@ function sendDeals(sender_psid) {
     }
   };
   callSendAPI(sender_psid, response).then(() => {
-    callSendAPI(
-      sender_psid,
-      response2.then(() => {
-        callSendAPI(sender_psid, response3);
-      })
-    );
+    return callsendAPI(sender_psid, response2).then(() => {
+      return callSendAPI(sender_psid, response3);
+    });
   });
-}
 
 function sendSorry(sender_psid) {
   console.log("[sendSorry] = called");
