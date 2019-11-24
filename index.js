@@ -177,7 +177,7 @@ function handlePostback(sender_psid, received_postback) {
   if (payload === 'Get Started') {
       sendGetStarted(sender_psid);
       console.log('[switch case[Get Started]] - reached');
-  } else if (typeof payload == 'number') {
+  } else if (typeof parseInt(payload) == 'number') {
     console.log('typof payload = number called');
     let paynum = parseInt(payload);
     if (paynum >= 18) {
@@ -201,11 +201,9 @@ function sendTextMessage(sender_psid, messageText) {
   console.log('sendTextMessage', messageText);
   let response;
   response = {
-    "message": {
       "text": messageText,
-    }
   };
-  callSendAPI(sender_psid, messageText);
+  callSendAPI(sender_psid, response);
 }
 
 function sendGetStarted(sender_psid) {
