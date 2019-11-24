@@ -134,7 +134,7 @@ function handleMessage(sender_psid, received_message) {
     // Checks if the message contains text
     if (received_message.text) { 
       console.log('[handleMessage.text]', received_message.text);   
-      handlePostback(sender_psid, received_message.text)
+      handlePostback(sender_psid, received_message.text);
     } else if (received_message.attachments) {
       // Get the URL of the message attachment
       let attachment_url = received_message.attachments[0].payload.url;
@@ -179,12 +179,15 @@ function handlePostback(sender_psid, received_postback) {
       console.log('[switch case[Get Started]] - reached');
   } else if (typeof payload == 'number') {
     console.log('typof payload = number called');
-   let paynum = parseInt(payload);
-   if (paynum >= 18) {
+    let paynum = parseInt(payload);
+    if (paynum >= 18) {
+      sendVenueCheck(sender_psid);
+    } else {
+      sendSorry(sender_psid);
+    }
+  } else if (payload >= 18) {
+    console.log('[payload >= 18]');
     sendVenueCheck(sender_psid);
-   } else {
-     sendSorry(sender_psid);
-   }
   } else {
     sendTextMessage(sender_psid, "You sent something I don't recognise");
   }
