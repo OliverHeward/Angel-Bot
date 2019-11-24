@@ -1,4 +1,3 @@
-
 /**
  * Copyright 2017-present, Facebook, Inc. All rights reserved.
  *
@@ -20,88 +19,79 @@
  *
  */
 
-'use strict';
-const PAGE_ACCESS_TOKEN = process.env.EAAHFzsBUAFcBACKIELF4PVb95ZBz2NA3e3NtZANS7ifvJw8shKBFp7kfjHap3i0ariDehmZCOtLuIK2xjZCojmVJDQXeZAq6vsCkLwYis09p7AWsmJ0wllmt1GubPZCb1fvaeZBlEbcZBMxWlLTJUcZCjgmG1cLX8WkHjHN7f701ZCN91ZCN5H0gBgZA;
+"use strict";
+const PAGE_ACCESS_TOKEN =
+  process.env
+    .EAAHFzsBUAFcBACKIELF4PVb95ZBz2NA3e3NtZANS7ifvJw8shKBFp7kfjHap3i0ariDehmZCOtLuIK2xjZCojmVJDQXeZAq6vsCkLwYis09p7AWsmJ0wllmt1GubPZCb1fvaeZBlEbcZBMxWlLTJUcZCjgmG1cLX8WkHjHN7f701ZCN91ZCN5H0gBgZA;
 // Imports dependencies and set up http server
-const 
-  request = require('request'),
-  express = require('express'),
-  fetch = require('node-fetch'),
-  body_parser = require('body-parser'),
+const request = require("request"),
+  express = require("express"),
+  fetch = require("node-fetch"),
+  body_parser = require("body-parser"),
   app = express().use(body_parser.json()); // creates express http server
 
 // Sets server port and logs message on success
-app.listen(process.env.PORT || 1337, () => console.log('webhook is listening'));
-app.use(body_parser.json({verify: verifyRequestSignature}));
+app.listen(process.env.PORT || 1337, () => console.log("webhook is listening"));
+app.use(body_parser.json({ verify: verifyRequestSignature }));
 
 // Accepts POST requests at /webhook endpoint
-app.post('/webhook', (req, res) => {  
-
+app.post("/webhook", (req, res) => {
   // Parse the request body from the POST
   let body = req.body;
 
   // Check the webhook event is from a Page subscription
-  if (body.object === 'page') {
-
+  if (body.object === "page") {
     body.entry.forEach(function(entry) {
-
       // Gets the body of the webhook event
       // Wil lonly ever contain one event, so we get index [0]
       let webhook_event = entry.messaging[0];
-      console.log('[webhook_event]', webhook_event);
-      console.log('[webhook_event.message]', webhook_event.message);
+      console.log("[webhook_event]", webhook_event);
+      console.log("[webhook_event.message]", webhook_event.message);
       // Get the sender PSID
       let sender_psid = webhook_event.sender.id;
-      console.log('Sender ID: ' + sender_psid);
+      console.log("Sender ID: " + sender_psid);
 
       // Check if the event is a message or postback and
       // pass the event to the appropriate handler function
       if (webhook_event.message) {
-        handleMessage(sender_psid, webhook_event.message);   
+        handleMessage(sender_psid, webhook_event.message);
       } else if (webhook_event.postback) {
         handlePostback(sender_psid, webhook_event.postback);
       }
-      
     });
     // Return a '200 OK' response to all events
-    res.status(200).send('EVENT_RECEIVED');
-
+    res.status(200).send("EVENT_RECEIVED");
   } else {
     // Return a '404 Not Found' if event is not from a page subscription
     res.sendStatus(404);
   }
-
 });
 
 // Server index page
-app.get("/", function (req, res) {
+app.get("/", function(req, res) {
   res.send("Deployed!");
 });
 
 // Accepts GET requests at the /webhook endpoint
-app.get('/webhook', (req, res) => {
-  
+app.get("/webhook", (req, res) => {
   /** UPDATE YOUR VERIFY TOKEN **/
   const VERIFY_TOKEN = "87192937141fa";
-  
+
   // Parse params from the webhook verification request
-  let mode = req.query['hub.mode'];
-  let token = req.query['hub.verify_token'];
-  let challenge = req.query['hub.challenge'];
-    
+  let mode = req.query["hub.mode"];
+  let token = req.query["hub.verify_token"];
+  let challenge = req.query["hub.challenge"];
+
   // Check if a token and mode were sent
   if (mode && token) {
-  
     // Check the mode and token sent are correct
-    if (mode === 'subscribe' && token === VERIFY_TOKEN) {
-      
+    if (mode === "subscribe" && token === VERIFY_TOKEN) {
       // Respond with 200 OK and challenge token from the request
-      console.log('WEBHOOK_VERIFIED');
+      console.log("WEBHOOK_VERIFIED");
       res.status(200).send(challenge);
-    
     } else {
       // Responds with '403 Forbidden' if verify tokens do not match
-      res.sendStatus(403);      
+      res.sendStatus(403);
     }
   }
 });
@@ -110,17 +100,18 @@ function verifyRequestSignature(req, res, buf) {
   var signature = req.headers["x-hub-signature"];
 
   if (!signature) {
-    // For testing, let's log an error. In production, you should throw an 
+    // For testing, let's log an error. In production, you should throw an
     // error.
     console.error("Couldn't validate the signature.");
   } else {
-    var elements = signature.split('=');
+    var elements = signature.split("=");
     var method = elements[0];
     var signatureHash = elements[1];
 
-    var expectedHash = crypto.createHmac('sha1', d5bb569f942017c4aa31764cd049aa17)
-                        .update(buf)
-                        .digest('hex');
+    var expectedHash = crypto
+      .createHmac("sha1", d5bb569f942017c4aa31764cd049aa17)
+      .update(buf)
+      .digest("hex");
 
     if (signatureHash != expectedHash) {
       throw new Error("Couldn't validate the request signature.");
@@ -129,57 +120,59 @@ function verifyRequestSignature(req, res, buf) {
 }
 
 function handleMessage(sender_psid, received_message) {
-    let response;
-    console.log(['obj'], received_message);
-    // Checks if the message contains text
-    if (received_message.text) { 
-      console.log('[handleMessage.text]', received_message.text);   
-      handlePostback(sender_psid, received_message.text);
-    } else if (received_message.attachments) {
-      // Get the URL of the message attachment
-      let attachment_url = received_message.attachments[0].payload.url;
-      response = {
-        "attachment": {
-          "type": "template",
-          "payload": {
-            "template_type": "generic",
-            "elements": [{
-              "title": "Is this the right picture?",
-              "subtitle": "Tap a button to answer.",
-              "image_url": attachment_url,
-              "buttons": [
+  let response;
+  console.log(["obj"], received_message);
+  // Checks if the message contains text
+  if (received_message.text) {
+    console.log("[handleMessage.text]", received_message.text);
+    handlePostback(sender_psid, received_message.text);
+  } else if (received_message.attachments) {
+    // Get the URL of the message attachment
+    let attachment_url = received_message.attachments[0].payload.url;
+    response = {
+      attachment: {
+        type: "template",
+        payload: {
+          template_type: "generic",
+          elements: [
+            {
+              title: "Is this the right picture?",
+              subtitle: "Tap a button to answer.",
+              image_url: attachment_url,
+              buttons: [
                 {
-                  "type": "postback",
-                  "title": "Yes!",
-                  "payload": "yes",
+                  type: "postback",
+                  title: "Yes!",
+                  payload: "yes"
                 },
                 {
-                  "type": "postback",
-                  "title": "No!",
-                  "payload": "no",
+                  type: "postback",
+                  title: "No!",
+                  payload: "no"
                 }
-              ],
-            }]
-          }
+              ]
+            }
+          ]
         }
       }
-    } 
-    
-    // Send the response message
-    callSendAPI(sender_psid, response);    
+    };
+  }
+
+  // Send the response message
+  callSendAPI(sender_psid, response);
 }
 
 function handlePostback(sender_psid, received_postback) {
   let response;
   // Get the payload for the postback
   let payload = received_postback.payload;
-  console.log('[handlePostback, receivedpostback]', received_postback);
-  if (payload === 'Get Started') {
-      sendGetStarted(sender_psid);
-      console.log('[switch case[Get Started]] - reached');
-  } else if (typeof parseInt(payload) == 'number') {
-    console.log('typof payload = number called');
-    console.log('typeof block', received_postback);
+  console.log("[handlePostback, receivedpostback]", received_postback);
+  if (payload === "Get Started") {
+    sendGetStarted(sender_psid);
+    console.log("[switch case[Get Started]] - reached");
+  } else if (typeof parseInt(payload) == "number") {
+    console.log("typof payload = number called");
+    console.log("typeof block", received_postback);
     let age = Number(received_postback);
     console.log(age);
     if (age >= 18) {
@@ -187,6 +180,9 @@ function handlePostback(sender_psid, received_postback) {
     } else {
       sendSorry(sender_psid);
     }
+  } else if (payload === "The Fox Under the Hill") {
+    console.log("payload === venue name");
+    sendDeals(sender_psid);
   } else {
     sendTextMessage(sender_psid, "You sent something I don't recognise");
   }
@@ -197,10 +193,10 @@ function handlePostback(sender_psid, received_postback) {
  *
  */
 function sendTextMessage(sender_psid, messageText) {
-  console.log('sendTextMessage', messageText);
+  console.log("sendTextMessage", messageText);
   let response;
   response = {
-      "text": messageText,
+    text: messageText
   };
   callSendAPI(sender_psid, response);
 }
@@ -208,62 +204,131 @@ function sendTextMessage(sender_psid, messageText) {
 function sendGetStarted(sender_psid) {
   let response;
   let response2;
-  console.log('sendGetStarted');
+  console.log("sendGetStarted");
   response = {
-      "text": "Hey! Welcome to the Hunry Horse - Jack Daniels Honey Ultimate Summer Pass. We need a couple of details from you to get started..."
+    text:
+      "Hey! Welcome to the Hunry Horse - Jack Daniels Honey Ultimate Summer Pass. We need a couple of details from you to get started..."
   };
   response2 = {
-    "text": "How old are you?"
+    text: "How old are you?"
   };
   callSendAPI(sender_psid, response).then(() => {
-    console.log('.then retrun callSendAPI called');
+    console.log(".then retrun callSendAPI called");
     return callSendAPI(sender_psid, response2);
   });
-};
+}
 
 // After RESPONSE = AGE > 18
 function sendVenueCheck(sender_psid) {
-  let response; 
+  let response;
   let response2;
-  console.log('sendVenueCheck');
+  console.log("sendVenueCheck");
   response = {
-    "text": "Great!"
+    text: "Great!"
   };
   response2 = {
-    "text": "Just so I can send you the best deals around, can you tell me which venue you are in?"
+    text:
+      "Just so I can send you the best deals around, can you tell me which venue you are in?"
   };
   callSendAPI(sender_psid, response).then(() => {
-    console.log('.then return callSendAPI sendVenueCheck Called');
+    console.log(".then return callSendAPI sendVenueCheck Called");
     return callSendAPI(sender_psid, response2);
   });
-};
+}
+
+function sendDeals(sender_psid) {
+  let response, response2, response3;
+  response = {
+    text: "Cheers!"
+  };
+  response2 = {
+    text: "Now you can check out the exclusive serves, offers and competitions below - chosen just for you."
+  };
+  response3 = {
+    "attachment": {
+      "type": "template",
+      "payload": {
+        "template_type": "generic",
+        "elements": [
+          {
+            "title": "Claim your 2-4-1 Jack Daniels Honey & Lemonades",
+            "image_url": "https://i.pinimg.com/originals/47/b3/db/47b3db82d07d3bc684c221bdd196c1b7.jpg",
+            "buttons":[
+              {
+                "type": "postback",
+                "title": "Claim offer",
+                "payload": "Claim offer"
+              }
+            ]
+          },
+          {
+            "title": "Redeem a FREE meal & drink*",
+            "image_url": "https://eatdrinkplay.com/wp-content/uploads/2012/07/4256_-23995-1.jpg",
+            "subtitle": "*Available only between 4-7pm",
+            "buttons":[
+              {
+                "type": "postback",
+                "title": "Redeem now",
+                "payload": "Redeem now"
+              }
+            ]
+          },
+          {
+            "title": "Enter our competition for a chance to WIN an ultimate CITY BREAK",
+            "image_url": "https://images.wowcher.co.uk/images/deal/8929303/777x520/376078.jpg",
+            "buttons":[
+              {
+                "type": "postback",
+                "title": "Enter now",
+                "payload": "Enter now"
+              }
+            ]
+          }
+        ]
+    }
+  }
+}
+  callSendAPI(sender_psid, response).then(() => {
+    callSendAPI(sender_psid, response2.then(() => {
+      setTimeout(function() {
+        callSendAPI(sender_psid, response3);
+      }, 500);
+    }))
+})
+}
 
 function sendSorry(sender_psid) {
-  console.log('[sendSorry] = called');
-  let response; 
+  console.log("[sendSorry] = called");
+  let response;
   response = {
-    "text": "I'm sorry, you have to be over 18 to be able to talk to me."
+    text: "I'm sorry, you have to be over 18 to be able to talk to me."
   };
   callSendAPI(sender_psid, response);
 }
 
 function callSendAPI(sender_psid, response) {
   // Construct the message body
-  console.log('callSendAPI function was called', response);
+  console.log("callSendAPI function was called", response);
   let request_body = {
-    "recipient": {
-      "id": sender_psid
+    recipient: {
+      id: sender_psid
     },
-    "message": response
+    message: response
   };
-  console.log('[request_body]', request_body);
+  console.log("[request_body]", request_body);
 
-  const qs = 'access_token=' + encodeURIComponent("EAAHFzsBUAFcBACKIELF4PVb95ZBz2NA3e3NtZANS7ifvJw8shKBFp7kfjHap3i0ariDehmZCOtLuIK2xjZCojmVJDQXeZAq6vsCkLwYis09p7AWsmJ0wllmt1GubPZCb1fvaeZBlEbcZBMxWlLTJUcZCjgmG1cLX8WkHjHN7f701ZCN91ZCN5H0gBgZA");
+  const qs =
+    "access_token=" +
+    encodeURIComponent(
+      "EAAHFzsBUAFcBACKIELF4PVb95ZBz2NA3e3NtZANS7ifvJw8shKBFp7kfjHap3i0ariDehmZCOtLuIK2xjZCojmVJDQXeZAq6vsCkLwYis09p7AWsmJ0wllmt1GubPZCb1fvaeZBlEbcZBMxWlLTJUcZCjgmG1cLX8WkHjHN7f701ZCN91ZCN5H0gBgZA"
+    );
   return fetch("https://graph.facebook.com/me/messages?" + qs, {
     method: "POST",
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify(request_body),
-  }).then(res => res.json()).then(json => console.log(json));
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(request_body)
+  })
+    .then(res => res.json())
+    .then(json => console.log(json));
   // // Send the HTTP request to the Messenger Platform
   // request({
   //   "uri": "https://graph.facebook.com/v2.6/me/messages",
@@ -276,12 +341,12 @@ function callSendAPI(sender_psid, response) {
   //   } else {
   //     console.error("Unable to send message:" + err);
   //   }
-  // }); 
-};
+  // });
+}
 // }
 
-app.listen(app.get('port'), function() {
-  console.log('Node app is running on port', app.get('port'));
+app.listen(app.get("port"), function() {
+  console.log("Node app is running on port", app.get("port"));
 });
 
 module.exports = app;
