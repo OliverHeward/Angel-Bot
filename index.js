@@ -318,7 +318,7 @@ function sendDeals(sender_psid) {
 
 // Handle the Claim Now Payload
 function handleClaimNow(sender_psid) {
-  let response, response2;
+  let response, response2, response3;
   response = {
     text: "Great choice!"
   };
