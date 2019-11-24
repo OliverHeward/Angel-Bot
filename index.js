@@ -182,10 +182,10 @@ function handlePostback(sender_psid, received_postback) {
     console.log('typeof block', received_postback);
     let age = Number(received_postback);
     console.log(age);
-    if (isNaN(age)) {
-      console.log('isNaN');
+    if (age >= 18) {
+      sendVenueCheck(sender_psid);
     } else {
-      console.log('is now a number number');
+      sendSorry(sender_psid);
     }
   } else {
     sendTextMessage(sender_psid, "You sent something I don't recognise");
