@@ -179,10 +179,13 @@ function handlePostback(sender_psid, received_postback) {
   if (payload === 'Get Started') {
       sendGetStarted(sender_psid);
       console.log('[switch case[Get Started]] - reached');
-  } else if (payload >= parseInt(payload, 18)) {
+  } else if (typeof payload == 'number') {
+   let paynum = parseInt(payload);
+   if (paynum >= 18) {
     sendVenueCheck(sender_psid);
-  } else if (payload < 18) {
-    sendSorry(sender_psid);
+   } else {
+     sendSorry(sender_psid);
+   }
   }
 }
 
