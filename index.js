@@ -179,11 +179,11 @@ function handlePostback(sender_psid, received_postback) {
       console.log('[switch case[Get Started]] - reached');
   } else if (typeof parseInt(payload) == 'number') {
     console.log('typof payload = number called');
-    if (parseInt(payload, 10) >= 18) {
-      console.log('reached parseInt(payload) >= 18');
-      sendVenueCheck(sender_psid);
+    let age = Number(payload);
+    if (isNaN(age)) {
+      console.log('isNaN');
     } else {
-      sendSorry(sender_psid);
+      console.log('is now a number number');
     }
   } else {
     sendTextMessage(sender_psid, "You sent something I don't recognise");
