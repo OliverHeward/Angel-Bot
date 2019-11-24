@@ -176,12 +176,12 @@ function handlePostback(sender_psid, received_postback) {
     let age = Number(received_postback);
     if (age >= 18) {
       sendVenueCheck(sender_psid);
+    } else if (age < 18) {
+      sendSorry(sender_psid);
     } else if (message === "The Fox Under the Hill") {
       console.log("payload === venue name");
       sendDeals(sender_psid);
-    } else {
-      sendSorry(sender_psid);
-    }
+    } 
   }
 }
 
