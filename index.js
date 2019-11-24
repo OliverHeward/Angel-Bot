@@ -179,7 +179,7 @@ function handlePostback(sender_psid, received_postback) {
       console.log('[switch case[Get Started]] - reached');
   } else if (typeof parseInt(payload) == 'number') {
     console.log('typof payload = number called');
-    if (Number(payload) >= 18) {
+    if (parseInt(payload, 10) >= 18) {
       console.log('reached parseInt(payload) >= 18');
       sendVenueCheck(sender_psid);
     } else {
