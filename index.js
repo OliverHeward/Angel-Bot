@@ -224,6 +224,7 @@ function sendGetStarted(sender_psid) {
 // After RESPONSE = AGE > 18
 function sendVenueCheck(sender_psid) {
   let response; 
+  let response2;
   console.log('sendVenueCheck');
   response = {
     "text": "Great!"
