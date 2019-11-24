@@ -39,15 +39,20 @@ app.post("/webhook", (req, res) => {
       console.log("[webhook_event.message]", webhook_event.message);
       // Get the sender PSID
       let sender_psid = webhook_event.sender.id;
+      let sender_name = webhook_event.sender.first_name;
+      let sender_lname = webhook_event.sender.last_name;
       console.log("Sender ID: " + sender_psid);
 
       // Check if the event is a message or postback and
       // pass the event to the appropriate handler function
       if (webhook_event.message) {
-        console.log('[webhook_event.message] catch block', webhook_event.message);
+        console.log(
+          "[webhook_event.message] catch block",
+          webhook_event.message
+        );
         handleMessage(sender_psid, webhook_event.message);
       } else if (webhook_event.postback) {
-        handlePostback(sender_psid, webhook_event.postback);
+        handlePostback(sender_psid, webhook_event.postback, name, lname);
       }
     });
     // Return a '200 OK' response to all events
@@ -153,7 +158,7 @@ function handleMessage(sender_psid, received_message) {
   callSendAPI(sender_psid, response);
 }
 
-function handlePostback(sender_psid, received_postback) {
+function handlePostback(sender_psid, received_postback, name, lname) {
   let response;
   // Get the payload for the postback
   let message = received_postback;
@@ -161,17 +166,26 @@ function handlePostback(sender_psid, received_postback) {
   console.log("[handlePostback, receivedpostback]", received_postback);
   switch (payload) {
     case "Get Started":
-      sendGetStarted(sender_psid);      
+      sendGetStarted(sender_psid);
       break;
+    // Maybe add a value variable for each and check it isn't currently 1 to prevent spamming.
     case "Claim offer":
       handleClaimNow(sender_psid);
-    break;
+      break;
     case "Redeem now":
       handleRedeemNow(sender_psid);
-    break;
+      break;
     case "Enter now":
       handleEnterNow(sender_psid);
-    break;
+      break;
+    
+    //Button Cases
+    case "yes email":
+      handleEntry(sender_psid, received)
+      break;
+    // Maybe ask for email again
+    case "no email":
+      break;
     default:
       break;
   }
@@ -184,7 +198,9 @@ function handlePostback(sender_psid, received_postback) {
     } else if (message === "The Fox Under the Hill") {
       console.log("payload === venue name");
       sendDeals(sender_psid);
-    } 
+    } else if (message.includes("@")) {
+      handleEmail(sender_psid, message, name, lname);
+    }
   }
 }
 
@@ -306,32 +322,29 @@ function handleClaimNow(sender_psid) {
   response = {
     text: "Great choice!"
   };
-  // 
+  //
   response2 = {
-    text: "Here\'s your QR code for 2-4-1 Jack Daniel\'s Honey & Lemonades. Show it at the bar to redeem. Enjoy!"
+    text:
+      "Here's your QR code for 2-4-1 Jack Daniel's Honey & Lemonades. Show it at the bar to redeem. Enjoy!"
   };
   // This will need to be changed to a request to an endpoint to retrieve a QR Code
   response3 = {
     attachment: {
       type: "image",
       payload: {
-        url: "https://images.samsung.com/is/image/samsung/p5/au/faq/os-pie-updates/QR-code.png"
+        url:
+          "https://images.samsung.com/is/image/samsung/p5/au/faq/os-pie-updates/QR-code.png"
       }
     }
   };
   callSendAPI(sender_psid, response).then(() => {
     return callSendAPI(sender_psid, response2).then(() => {
       return callSendAPI(sender_psid, response3);
-    })
+    });
   });
 }
 // Handle the Redeem Now Payload
 function handleRedeemNow(sender_psid) {
-  let response;
-  callSendAPI(sender_psid, response);
-}
-// Handle the Redeem Now Payload
-function handleEnterNow(sender_psid) {
   let response, response2, response3, date;
   date = Date.now();
   if (date.getHours() > 16 && date.getHours() < 19) {
@@ -340,22 +353,23 @@ function handleEnterNow(sender_psid) {
       text: "Great decision!"
     };
     response2 = {
-      text: "Here\'s your QR code for a Meal and Drink on Jack!"
+      text: "Here's your QR code for a Meal and Drink on Jack!"
     };
     // This will need to be changed to a request to an endpoint to retrieve a QR Code
     response3 = {
       attachment: {
         type: "image",
         payload: {
-          url: "https://images.samsung.com/is/image/samsung/p5/au/faq/os-pie-updates/QR-code.png"
+          url:
+            "https://images.samsung.com/is/image/samsung/p5/au/faq/os-pie-updates/QR-code.png"
         }
       }
-    }
+    };
     callSendAPI(sender_psid, response).then(() => {
       return callSendAPI(sender_psid, response2).then(() => {
         return callSendAPI(sender_psid, response3);
-      })
-    })
+      });
+    });
   } else {
     // Send a notice saying that the hours aren't between 4-7 are they sure they want this
     response = {
@@ -381,11 +395,57 @@ function handleEnterNow(sender_psid) {
           ]
         }
       }
-    }
+    };
     callSendAPI(sender_psid, response).then(() => {
-      return callSendAPI(sender_psid, response2)
-    })
+      return callSendAPI(sender_psid, response2);
+    });
   }
+}
+// Handle the Redeem Now Payload
+function handleEnterNow(sender_psid) {
+  let response, response2;
+  response = {
+    text: "Wise move! For us to be able to process your entry, we will need a few details from you first..."
+  };
+  response2 = {
+    text: "What is your best email address so we can inform you of your result?"
+  };
+  sendCallAPI(sender_psid, response).then(() => {
+    return sendCallAPI(sender_psid, response2)
+  }) 
+}
+
+// Handle Email response from user
+function handleEmail(sender_psid, email, name, lname) {
+  let response, response2;
+  response = {
+    text: "Thank you "+name+". Can you tell us if this is the correct email address?"
+  };
+  // Check this is the correct email by posting it back to them
+  response2 = {
+    attachment: {
+      type: "template",
+      payload: {
+        template_type: "button",
+        text: email,
+        buttons: [
+          {
+            type: "postback",
+            title: "Yes thats it!",
+            payload: "yes email"
+          },
+          {
+            type: "postback",
+            title: "No?",
+            payload: "no email"
+          }
+        ]
+      }
+    }
+  };
+  callSendAPI(sender_psid, response).then(() => {
+    return callSendAPI(sender_psid, response2);
+  });
 }
 
 function sendSorry(sender_psid) {
