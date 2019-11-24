@@ -172,22 +172,16 @@ function handlePostback(sender_psid, received_postback) {
     sendGetStarted(sender_psid);
     console.log("[switch case[Get Started]] - reached");
   } 
-  if (typeof parseInt(message) == "number") {
-    console.log("typof payload = number called");
-    console.log("typeof block", received_postback);
+  if (message != "") {
     let age = Number(received_postback);
-    console.log(age);
     if (age >= 18) {
       sendVenueCheck(sender_psid);
+    } else if (message === "The Fox Under the Hill") {
+      console.log("payload === venue name");
+      sendDeals(sender_psid);
     } else {
       sendSorry(sender_psid);
     }
-  } else if (message === "The Fox Under the Hill") {
-    console.log("payload === venue name");
-    sendDeals(sender_psid);
-  } else {
-    sendTextMessage(sender_psid, "You sent something I don't recognise");
-  }
 }
 
 /*
