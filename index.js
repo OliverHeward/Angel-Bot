@@ -291,7 +291,7 @@ function sendDeals(sender_psid) {
     }
   };
   callSendAPI(sender_psid, response).then(() => {
-    return callsendAPI(sender_psid, response2).then(() => {
+    return callSendAPI(sender_psid, response2).then(() => {
       return callSendAPI(sender_psid, response3);
     });
   });
