@@ -178,7 +178,6 @@ function handlePostback(sender_psid, received_postback, name, lname) {
     case "Enter now":
       handleEnterNow(sender_psid);
       break;
-    
     //Button Cases
     case "yes email":
       handleEntry(sender_psid, received)
@@ -410,8 +409,8 @@ function handleEnterNow(sender_psid) {
   response2 = {
     text: "What is your best email address so we can inform you of your result?"
   };
-  sendCallAPI(sender_psid, response).then(() => {
-    return sendCallAPI(sender_psid, response2)
+  callSendAPI(sender_psid, response).then(() => {
+    return callSendAPI(sender_psid, response2)
   }) 
 }
 
