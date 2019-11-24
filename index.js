@@ -52,7 +52,7 @@ app.post("/webhook", (req, res) => {
         );
         handleMessage(sender_psid, webhook_event.message);
       } else if (webhook_event.postback) {
-        handlePostback(sender_psid, webhook_event.postback, name, lname);
+        handlePostback(sender_psid, webhook_event.postback, sender_name, sender_lname);
       }
     });
     // Return a '200 OK' response to all events
