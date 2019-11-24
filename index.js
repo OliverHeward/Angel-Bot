@@ -39,14 +39,13 @@ app.post('/webhook', (req, res) => {
 
   // Parse the request body from the POST
   let body = req.body;
-
+  let webhook_event = entry.messaging[0];
   // Check the webhook event is from a Page subscription
   if (body.object === 'page') {
 
     body.entry.forEach(function(entry) {
 
       // Gets the body of the webhook event
-      let webhook_event = entry.messaging[0];
       console.log(['webhook_event'], webhook_event);
       console.log(['webhook_event.message'], webhook_event.message);
 
