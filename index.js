@@ -252,7 +252,6 @@ function callSendAPI(sender_psid, response) {
   //   method: "POST",
   //   body: request_body,
   // }).then(res => res.json()).then(json => console.log(json));
-};
   // // Send the HTTP request to the Messenger Platform
   request({
     "uri": "https://graph.facebook.com/v2.6/me/messages",
@@ -266,6 +265,7 @@ function callSendAPI(sender_psid, response) {
       console.error("Unable to send message:" + err);
     }
   }); 
+};
 // }
 
 app.listen(app.get('port'), function() {
