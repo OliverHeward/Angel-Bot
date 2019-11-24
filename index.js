@@ -1,14 +1,4 @@
 /**
- * Copyright 2017-present, Facebook, Inc. All rights reserved.
- *
- * This source code is licensed under the license found in the
- * LICENSE file in the root directory of this source tree.
- *
- * Messenger Platform Quick Start Tutorial
- *
- * This is the completed code for the Messenger Platform quick start tutorial
- *
- * https://developers.faceook.com/docs/messenger-platform/getting-started/quick-start/
  *
  * To run this code, you must do the following:
  *
@@ -169,9 +159,21 @@ function handlePostback(sender_psid, received_postback) {
   let message = received_postback;
   let payload = received_postback.payload;
   console.log("[handlePostback, receivedpostback]", received_postback);
-  if (payload === "Get Started") {
-    sendGetStarted(sender_psid);
-    console.log("[switch case[Get Started]] - reached");
+  switch (payload) {
+    case "Get Started":
+      sendGetStarted(sender_psid);      
+      break;
+    case "Claim offer":
+      handleClaimNow(sender_psid);
+    break;
+    case "Redeem now":
+      handleRedeemNow(sender_psid);
+    break;
+    case "Enter now":
+      handleEnterNow(sender_psid);
+    break;
+    default:
+      break;
   }
   if (message != "" && !payload) {
     let age = Number(received_postback);
@@ -296,6 +298,94 @@ function sendDeals(sender_psid) {
       return callSendAPI(sender_psid, response3);
     });
   });
+}
+
+// Handle the Claim Now Payload
+function handleClaimNow(sender_psid) {
+  let response, response2;
+  response = {
+    text: "Great choice!"
+  };
+  // 
+  response2 = {
+    text: "Here\'s your QR code for 2-4-1 Jack Daniel\'s Honey & Lemonades. Show it at the bar to redeem. Enjoy!"
+  };
+  // This will need to be changed to a request to an endpoint to retrieve a QR Code
+  response3 = {
+    attachment: {
+      type: "image",
+      payload: {
+        url: "https://images.samsung.com/is/image/samsung/p5/au/faq/os-pie-updates/QR-code.png"
+      }
+    }
+  };
+  callSendAPI(sender_psid, response).then(() => {
+    return callSendAPI(sender_psid, response2).then(() => {
+      return callSendAPI(sender_psid, response3);
+    })
+  });
+}
+// Handle the Redeem Now Payload
+function handleRedeemNow(sender_psid) {
+  let response;
+  callSendAPI(sender_psid, response);
+}
+// Handle the Redeem Now Payload
+function handleEnterNow(sender_psid) {
+  let response, response2, response3, date;
+  date = Date.now();
+  if (date.getHours() > 16 && date.getHours() < 19) {
+    // Send QR Code for Deal or Code of some form
+    response = {
+      text: "Great decision!"
+    };
+    response2 = {
+      text: "Here\'s your QR code for a Meal and Drink on Jack!"
+    };
+    // This will need to be changed to a request to an endpoint to retrieve a QR Code
+    response3 = {
+      attachment: {
+        type: "image",
+        payload: {
+          url: "https://images.samsung.com/is/image/samsung/p5/au/faq/os-pie-updates/QR-code.png"
+        }
+      }
+    }
+    callSendAPI(sender_psid, response).then(() => {
+      return callSendAPI(sender_psid, response2).then(() => {
+        return callSendAPI(sender_psid, response3);
+      })
+    })
+  } else {
+    // Send a notice saying that the hours aren't between 4-7 are they sure they want this
+    response = {
+      text: "Ohh, this code is only valid between 4 - 7pm!"
+    };
+    response2 = {
+      attachment: {
+        type: "template",
+        payload: {
+          template_type: "button",
+          text: "Are you sure you wish to continue?",
+          buttons: [
+            {
+              type: "postback",
+              title: "Yes, its for later",
+              payload: "yes"
+            },
+            {
+              type: "postback",
+              title: "No",
+              payload: "no"
+            }
+          ]
+        }
+      }
+    }
+    callSendAPI(sender_psid, response).then(() => {
+      return callSendAPI(sender_psid, response2)
+    })
+  }
 }
 
 function sendSorry(sender_psid) {
