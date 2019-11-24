@@ -185,6 +185,8 @@ function handlePostback(sender_psid, received_postback) {
    } else {
      sendSorry(sender_psid);
    }
+  } else {
+    sendTextMessage(sender_psid, "You sent something I don't recognise");
   }
 }
 
