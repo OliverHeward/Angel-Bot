@@ -46,6 +46,7 @@ app.post('/webhook', (req, res) => {
     body.entry.forEach(function(entry) {
 
       // Gets the body of the webhook event
+      // Wil lonly ever contain one event, so we get index [0]
       let webhook_event = entry.messaging[0];
       console.log('[webhook_event]', webhook_event);
       // Get the sender PSID
@@ -131,7 +132,7 @@ function handleMessage(sender_psid, received_message) {
     console.log(['obj'], received_message);
     // Checks if the message contains text
     if (received_message.text) { 
-      console.log('[handleMessage.text]', recieved_message.text);   
+      console.log('[handleMessage.text]', received_message.text);   
       handlePostback(sender_psid, received_message.text)
     } else if (received_message.attachments) {
       // Get the URL of the message attachment
