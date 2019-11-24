@@ -171,7 +171,7 @@ function handlePostback(sender_psid, received_postback) {
   if (payload === "Get Started") {
     sendGetStarted(sender_psid);
     console.log("[switch case[Get Started]] - reached");
-  } 
+  }
   if (message != "") {
     let age = Number(received_postback);
     if (age >= 18) {
@@ -182,7 +182,7 @@ function handlePostback(sender_psid, received_postback) {
     } else {
       sendSorry(sender_psid);
     }
-}
+  }
 }
 
 /*
@@ -294,9 +294,7 @@ function sendDeals(sender_psid) {
     callSendAPI(
       sender_psid,
       response2.then(() => {
-        setTimeout(function() {
-          callSendAPI(sender_psid, response3);
-        }, 500);
+        callSendAPI(sender_psid, response3);
       })
     );
   });
