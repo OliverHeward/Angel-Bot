@@ -295,6 +295,7 @@ function sendDeals(sender_psid) {
       return callSendAPI(sender_psid, response3);
     });
   });
+}
 
 function sendSorry(sender_psid) {
   console.log("[sendSorry] = called");
