@@ -416,7 +416,7 @@ function handleEnterNow(sender_psid) {
 }
 
 // Handle Email response from user
-function handleEmail(sender_psid, email, name, lname) {
+function handleEmail(sender_psid, email, name) {
   let response, response2;
   response = {
     text: "Thank you "+name+". Can you tell us if this is the correct email address?"
