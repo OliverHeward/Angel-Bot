@@ -49,6 +49,7 @@ app.post('/webhook', (req, res) => {
       // Wil lonly ever contain one event, so we get index [0]
       let webhook_event = entry.messaging[0];
       console.log('[webhook_event]', webhook_event);
+      console.log('[webhook_event.message]', webhook_event.message);
       // Get the sender PSID
       let sender_psid = webhook_event.sender.id;
       console.log('Sender ID: ' + sender_psid);
