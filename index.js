@@ -179,10 +179,9 @@ function handlePostback(sender_psid, received_postback) {
   if (payload === 'Get Started') {
       sendGetStarted(sender_psid);
       console.log('[switch case[Get Started]] - reached');
-  } else if (payload > "18") {
-    sendTextMessage(sender_psid, "Great!");
+  } else if (parseInt(payload) >= 18) {
     sendVenueCheck(sender_psid);
-  } else if (payload < "18") {
+  } else if (parseInt(payload) < 18) {
     sendSorry(sender_psid);
   }
 }
@@ -202,15 +201,6 @@ function sendTextMessage(sender_psid, messageText) {
   callSendAPI(sender_psid, messageText);
 }
 
-// function sendAgeCheck(sender_psid) {
-//   let response;
-//   console.log('sendAgeCheck');
-//   response = {
-//     "text": "How old are you?"
-//   };
-//   callSendAPI(sender_psid, response);
-// }
-
 function sendGetStarted(sender_psid) {
   let response;
   let response2;
@@ -225,15 +215,31 @@ function sendGetStarted(sender_psid) {
     console.log('.then retrun callSendAPI called');
     return callSendAPI(sender_psid, response2);
   });
-  // sendAgeCheck(sender_psid);
-}
+};
 
+// After RESPONSE = AGE > 18
 function sendVenueCheck(sender_psid) {
   let response; 
   console.log('sendVenueCheck');
   response = {
     "text": "Great!"
-  }
+  };
+  response2 = {
+    "text": "Just so I can send you the best deals around, can you tell me which venue you are in?"
+  };
+  callSendAPI(sender_psid, response).then(() => {
+    console.log('.then return callSendAPI sendVenueCheck Called');
+    return callSendAPI(sender_psid, response2);
+  });
+};
+
+function sendSorry(sender_psid) {
+  console.log('[sendSorry] = called');
+  let response; 
+  response = {
+    "text": "I'm sorry, you have to be over 18 to be able to talk to me."
+  };
+  callSendAPI(sender_psid, response);
 }
 
 function callSendAPI(sender_psid, response) {
