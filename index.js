@@ -21,7 +21,7 @@
  */
 
 'use strict';
-const PAGE_ACCESS_TOKEN = process.env.EAAHFzsBUAFcBAG4ls59326QdIvDCRKgCuWGgY47WuMeLeBr5mnfJJklhACbkbVoYfvTAuqXPOTzxHLvCzNsHvEZBELSNbtR8zlFe2HmAh8jyZB2kEei46usBcVyXZBQLTknY1upVL6pp3EH6r4yzeJNtRqoHOXBptbQeUD4Dyzlj2QKdImt;
+const PAGE_ACCESS_TOKEN = process.env.EAAHFzsBUAFcBACKIELF4PVb95ZBz2NA3e3NtZANS7ifvJw8shKBFp7kfjHap3i0ariDehmZCOtLuIK2xjZCojmVJDQXeZAq6vsCkLwYis09p7AWsmJ0wllmt1GubPZCb1fvaeZBlEbcZBMxWlLTJUcZCjgmG1cLX8WkHjHN7f701ZCN91ZCN5H0gBgZA;
 // Imports dependencies and set up http server
 const 
   request = require('request'),
@@ -247,7 +247,7 @@ function callSendAPI(sender_psid, response) {
   };
   console.log('[request_body]', request_body);
 
-  const qs = "access_token=EAAHFzsBUAFcBAG4ls59326QdIvDCRKgCuWGgY47WuMeLeBr5mnfJJklhACbkbVoYfvTAuqXPOTzxHLvCzNsHvEZBELSNbtR8zlFe2HmAh8jyZB2kEei46usBcVyXZBQLTknY1upVL6pp3EH6r4yzeJNtRqoHOXBptbQeUD4Dyzlj2QKdImt";
+  const qs = "access_token=EAAHFzsBUAFcBACKIELF4PVb95ZBz2NA3e3NtZANS7ifvJw8shKBFp7kfjHap3i0ariDehmZCOtLuIK2xjZCojmVJDQXeZAq6vsCkLwYis09p7AWsmJ0wllmt1GubPZCb1fvaeZBlEbcZBMxWlLTJUcZCjgmG1cLX8WkHjHN7f701ZCN91ZCN5H0gBgZA";
   return fetch("https://graph.facebook.com/v2.6/messages?" + qs, {
     method: "POST",
     body: JSON.stringify(request_body),
