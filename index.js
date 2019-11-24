@@ -183,6 +183,7 @@ function handlePostback(sender_psid, received_postback) {
       sendSorry(sender_psid);
     }
 }
+}
 
 /*
  * Send a text message using the Send API.
