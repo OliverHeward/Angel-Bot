@@ -38,6 +38,7 @@ app.post("/webhook", (req, res) => {
       console.log("[webhook_event]", webhook_event);
       console.log("[webhook_event.message]", webhook_event.message);
       // Get the sender PSID
+      console.log(webhook_event.sender);
       let sender_psid = webhook_event.sender.id;
       let sender_name = webhook_event.sender.first_name;
       let sender_lname = webhook_event.sender.last_name;
