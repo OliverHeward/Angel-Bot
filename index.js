@@ -180,7 +180,7 @@ function handlePostback(sender_psid, received_postback) {
     } else {
       sendSorry(sender_psid);
     }
-  } else if (payload === "The Fox Under the Hill") {
+  } else if (received_postback === "The Fox Under the Hill") {
     console.log("payload === venue name");
     sendDeals(sender_psid);
   } else {
@@ -242,59 +242,67 @@ function sendDeals(sender_psid) {
     text: "Cheers!"
   };
   response2 = {
-    text: "Now you can check out the exclusive serves, offers and competitions below - chosen just for you."
+    text:
+      "Now you can check out the exclusive serves, offers and competitions below - chosen just for you."
   };
   response3 = {
-    "attachment": {
-      "type": "template",
-      "payload": {
-        "template_type": "generic",
-        "elements": [
+    attachment: {
+      type: "template",
+      payload: {
+        template_type: "generic",
+        elements: [
           {
-            "title": "Claim your 2-4-1 Jack Daniels Honey & Lemonades",
-            "image_url": "https://i.pinimg.com/originals/47/b3/db/47b3db82d07d3bc684c221bdd196c1b7.jpg",
-            "buttons":[
+            title: "Claim your 2-4-1 Jack Daniels Honey & Lemonades",
+            image_url:
+              "https://i.pinimg.com/originals/47/b3/db/47b3db82d07d3bc684c221bdd196c1b7.jpg",
+            buttons: [
               {
-                "type": "postback",
-                "title": "Claim offer",
-                "payload": "Claim offer"
+                type: "postback",
+                title: "Claim offer",
+                payload: "Claim offer"
               }
             ]
           },
           {
-            "title": "Redeem a FREE meal & drink*",
-            "image_url": "https://eatdrinkplay.com/wp-content/uploads/2012/07/4256_-23995-1.jpg",
-            "subtitle": "*Available only between 4-7pm",
-            "buttons":[
+            title: "Redeem a FREE meal & drink*",
+            image_url:
+              "https://eatdrinkplay.com/wp-content/uploads/2012/07/4256_-23995-1.jpg",
+            subtitle: "*Available only between 4-7pm",
+            buttons: [
               {
-                "type": "postback",
-                "title": "Redeem now",
-                "payload": "Redeem now"
+                type: "postback",
+                title: "Redeem now",
+                payload: "Redeem now"
               }
             ]
           },
           {
-            "title": "Enter our competition for a chance to WIN an ultimate CITY BREAK",
-            "image_url": "https://images.wowcher.co.uk/images/deal/8929303/777x520/376078.jpg",
-            "buttons":[
+            title:
+              "Enter our competition for a chance to WIN an ultimate CITY BREAK",
+            image_url:
+              "https://images.wowcher.co.uk/images/deal/8929303/777x520/376078.jpg",
+            buttons: [
               {
-                "type": "postback",
-                "title": "Enter now",
-                "payload": "Enter now"
+                type: "postback",
+                title: "Enter now",
+                payload: "Enter now"
               }
             ]
           }
         ]
+      }
     }
-  }
-}
+  };
   callSendAPI(sender_psid, response).then(() => {
-    callSendAPI(sender_psid, response2.then(() => {
-      setTimeout(function() {
-        callSendAPI(sender_psid, response3);
-      }, 500);
-    }))
-})
+    callSendAPI(
+      sender_psid,
+      response2.then(() => {
+        setTimeout(function() {
+          callSendAPI(sender_psid, response3);
+        }, 500);
+      })
+    );
+  });
 }
 
 function sendSorry(sender_psid) {
