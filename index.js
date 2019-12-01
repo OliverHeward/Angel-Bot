@@ -489,7 +489,7 @@ function handleNewSelection(sender_psid) {
     }
   }
   callSendAPI(sender_psid, response).then(() => {
-    return callSendAPI(sender_psid, response)
+    return callSendAPI(sender_psid, response2)
   });
 }
 // Handle the Redeem Now Payload
