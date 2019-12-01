@@ -345,9 +345,11 @@ function handleClaimNow(sender_psid) {
 }
 // Handle the Redeem Now Payload
 function handleRedeemNow(sender_psid) {
-  let response, response2, response3, date;
-  date = Date.now();
-  if (date.getHours() > 16 && date.getHours() < 19) {
+  let response, response2, response3, d, date;
+  d = new Date();
+  date = d.getHours();
+  console.log(date);
+  if (date > 16 && date < 19) {
     // Send QR Code for Deal or Code of some form
     response = {
       text: "Great decision!"
