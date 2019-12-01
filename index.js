@@ -186,6 +186,13 @@ function handlePostback(sender_psid, received_postback, name, lname) {
     // Maybe ask for email again
     case "no email":
       break;
+    // Outside of Promo hours case
+    case "yes": 
+      handleSaveLater(sender_psid);
+      break;
+    case "no":
+      handleNewSelection(sender_psid);
+      break;
     default:
       break;
   }
@@ -402,6 +409,88 @@ function handleRedeemNow(sender_psid) {
       return callSendAPI(sender_psid, response2);
     });
   }
+}
+
+// Handle when a user is out of Promo Hours but wishes to still take offer
+function handleSaveLater(sender_psid) {
+  let response, response2;
+  response = {
+    text: "Not a problem! Make sure you save a copy of this for the next time you are there so that you can grab this great deal!"
+  }
+  // Re-write this later to make a request to a backend API to grab a QR code
+  response2 = {
+    attachment: {
+      type: "image",
+      payload: {
+        url:
+          "https://images.samsung.com/is/image/samsung/p5/au/faq/os-pie-updates/QR-code.png"
+      }
+    }
+  }
+  callSendAPI(sender_psid, response).then(() => {
+    return callSendAPI(sender_psid, response2);
+  });
+}
+
+// Handle when a user is out of Promo Hours and wishes to make a new selection
+function handleNewSelection(sender_psid) {
+  let response, response2;
+  response = {
+    text: "Not a problem, I will resend you the offers again so that you can make another selection"
+  }
+  // Resending the promotional offers payload...
+  // May be wise to send over the voided selection and conditionally remove it from the template
+  response2 = {
+    attachment: {
+      type: "template",
+      payload: {
+        template_type: "generic",
+        elements: [
+          {
+            title: "Claim your 2-4-1 Jack Daniels Honey & Lemonades",
+            image_url:
+              "https://i.pinimg.com/originals/47/b3/db/47b3db82d07d3bc684c221bdd196c1b7.jpg",
+            buttons: [
+              {
+                type: "postback",
+                title: "Claim offer",
+                payload: "Claim offer"
+              }
+            ]
+          },
+          {
+            title: "Redeem a FREE meal & drink*",
+            image_url:
+              "https://eatdrinkplay.com/wp-content/uploads/2012/07/4256_-23995-1.jpg",
+            subtitle: "*Available only between 4-7pm",
+            buttons: [
+              {
+                type: "postback",
+                title: "Redeem now",
+                payload: "Redeem now"
+              }
+            ]
+          },
+          {
+            title:
+              "Enter our competition for a chance to WIN an ultimate CITY BREAK",
+            image_url:
+              "https://images.wowcher.co.uk/images/deal/8929303/777x520/376078.jpg",
+            buttons: [
+              {
+                type: "postback",
+                title: "Enter now",
+                payload: "Enter now"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+  callSendAPI(sender_psid, response).then(() => {
+    return callSendAPI(sender_psid, response)
+  });
 }
 // Handle the Redeem Now Payload
 function handleEnterNow(sender_psid) {
